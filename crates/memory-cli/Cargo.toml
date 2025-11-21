@@ -1,0 +1,15 @@
+[package]
+name = "memory-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "A simple CLI for testing deployment pipelines"
+
+[[bin]]
+name = "memorycli"
+path = "src/main.rs"
+
+[dependencies]
+memory-core = { path = "../memory-core" }
+clap = { version = "4", features = ["derive"] }
+
