@@ -9,6 +9,5 @@ members = [
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/anthropics/memory-cli"
+repository = "https://github.com/memvid/memory-cli"
 authors = ["Memvid Team <team@memvid.com>"]
-
