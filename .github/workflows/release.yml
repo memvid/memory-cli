@@ -96,11 +96,77 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     steps:
-      - name: Update Homebrew formula
-        uses: mislav/bump-homebrew-formula-action@v3
+      - uses: actions/checkout@v4
         with:
-          formula-name: memorycli
-          homebrew-tap: memvid/homebrew-tap
-          download-url: https://github.com/memvid/memory-cli/releases/download/${{ github.ref_name }}/memorycli-x86_64-apple-darwin.tar.gz
+          repository: memvid/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Download binaries and calculate SHA256
+        run: |
+          VERSION="${{ github.ref_name }}"
+          BASE_URL="https://github.com/memvid/memory-cli/releases/download/${VERSION}"
+
+          # Download and calculate SHA256 for each platform
+          SHA_X86_64_MACOS=$(curl -sL "${BASE_URL}/memorycli-x86_64-apple-darwin.tar.gz" | shasum -a 256 | cut -d' ' -f1)
+          SHA_AARCH64_MACOS=$(curl -sL "${BASE_URL}/memorycli-aarch64-apple-darwin.tar.gz" | shasum -a 256 | cut -d' ' -f1)
+          SHA_X86_64_LINUX=$(curl -sL "${BASE_URL}/memorycli-x86_64-unknown-linux-gnu.tar.gz" | shasum -a 256 | cut -d' ' -f1)
+          SHA_AARCH64_LINUX=$(curl -sL "${BASE_URL}/memorycli-aarch64-unknown-linux-gnu.tar.gz" | shasum -a 256 | cut -d' ' -f1)
+
+          echo "SHA_X86_64_MACOS=${SHA_X86_64_MACOS}" >> $GITHUB_ENV
+          echo "SHA_AARCH64_MACOS=${SHA_AARCH64_MACOS}" >> $GITHUB_ENV
+          echo "SHA_X86_64_LINUX=${SHA_X86_64_LINUX}" >> $GITHUB_ENV
+          echo "SHA_AARCH64_LINUX=${SHA_AARCH64_LINUX}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Update Homebrew formula
+        working-directory: homebrew-tap
         env:
-          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          VERSION: ${{ github.ref_name }}
+          BASE_URL: https://github.com/memvid/memory-cli/releases/download/${{ github.ref_name }}
+        run: |
+          python3 << 'EOF'
+          import re
+          import os
+
+          FORMULA_FILE = "Formula/memorycli.rb"
+          VERSION = os.environ['VERSION'].lstrip('v')
+          BASE_URL = os.environ['BASE_URL']
+
+          with open(FORMULA_FILE, 'r') as f:
+              content = f.read()
+
+          # Update version
+          content = re.sub(r'version\s+"[^"]+"', f'version "{VERSION}"', content)
+
+          # Update all URLs and SHA256s
+          updates = [
+              ('x86_64-apple-darwin', os.environ['SHA_X86_64_MACOS']),
+              ('aarch64-apple-darwin', os.environ['SHA_AARCH64_MACOS']),
+              ('x86_64-unknown-linux-gnu', os.environ['SHA_X86_64_LINUX']),
+              ('aarch64-unknown-linux-gnu', os.environ['SHA_AARCH64_LINUX']),
+          ]
+
+          for target, sha256 in updates:
+              # Update URL
+              url_pattern = rf'url\s+"[^"]*memorycli-{re.escape(target)}[^"]*"'
+              new_url = f'url "{BASE_URL}/memorycli-{target}.tar.gz"'
+              content = re.sub(url_pattern, new_url, content)
+              
+              # Update SHA256 (find the sha256 line after the URL)
+              sha256_pattern = rf'(url\s+"[^"]*memorycli-{re.escape(target)}[^"]*"\s*\n\s*)sha256\s+"[^"]+"'
+              replacement = rf'\1sha256 "{sha256}"'
+              content = re.sub(sha256_pattern, replacement, content)
+
+          with open(FORMULA_FILE, 'w') as f:
+              f.write(content)
+          EOF
+
+      - name: Commit and push
+        working-directory: homebrew-tap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/memorycli.rb
+          git diff --staged --quiet || git commit -m "Update memorycli to ${{ github.ref_name }}"
+          git push
