@@ -1,0 +1,14 @@
+Source: memorycli
+Section: utils
+Priority: optional
+Maintainer: Memvid Team <team@memvid.com>
+Build-Depends: debhelper (>= 11), cargo, rustc
+Standards-Version: 4.5.0
+Homepage: https://github.com/memvid/memory-cli
+
+Package: memorycli
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A simple CLI for testing deployment pipelines
+ Memory CLI is a test tool for validating cross-platform package
+ deployment before shipping memvid-cli.
