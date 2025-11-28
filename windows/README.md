@@ -4,12 +4,12 @@ This directory contains the NSIS installer script for creating a Windows install
 
 ## Requirements
 
-- [NSIS](https://nsis.sourceforge.io/Download) (Nullsoft Scriptable Install System) installed on **Windows**
-- The Windows executable (`memorycli.exe`) from GitHub releases
+- [NSIS](https://nsis.sourceforge.io/Download) (Nullsoft Scriptable Install System) installed on Windows
+- The Windows executable (`memorycli.exe`) - either from GitHub releases or built locally
 
-**Note:** NSIS (`makensis`) is a Windows-only tool. You need to build the installer on a Windows machine or use the automated GitHub Actions workflow (see below).
+## Building the Installer
 
-## Building the Installer on Windows
+### Option 1: Using Pre-built Executable from GitHub Releases
 
 1. Download the Windows build from GitHub releases:
    - Go to the [releases page](https://github.com/memvid/memory-cli/releases)
@@ -29,29 +29,25 @@ This directory contains the NSIS installer script for creating a Windows install
 
    This will create `memvid-installer.exe` in the `windows` directory.
 
-## Automated Build via GitHub Actions
+### Option 2: Building from Source
 
-The installer is automatically built during releases via GitHub Actions. When you create a release tag (e.g., `v0.1.6`), the workflow will:
-1. Build the Windows executable
-2. Create the NSIS installer using the `windows/installer.nsi` script
-3. Upload `memvid-installer.exe` as a release asset alongside the other binaries
+1. Build the Windows executable:
+   ```cmd
+   # Install Windows target (if not already installed)
+   rustup target add x86_64-pc-windows-msvc
 
-No manual steps required! The installer will be available in the GitHub releases page.
+   # Build the project
+   cargo build --release --target x86_64-pc-windows-msvc
 
-## Alternative: Building from Source
+   # Copy the executable to windows folder
+   copy target\x86_64-pc-windows-msvc\release\memorycli.exe windows\memorycli.exe
+   ```
 
-If you prefer to build the executable yourself:
-
-```bash
-# Install Windows target (if not already installed)
-rustup target add x86_64-pc-windows-msvc
-
-# Build the project
-cargo build --release --target x86_64-pc-windows-msvc
-
-# Copy the executable to windows folder
-cp target/x86_64-pc-windows-msvc/release/memorycli.exe windows/
-```
+2. Navigate to the `windows` directory and build the installer:
+   ```cmd
+   cd windows
+   makensis installer.nsi
+   ```
 
 ## What the Installer Does
 
@@ -78,5 +74,11 @@ The uninstaller will:
 
 - `installer.nsi` - NSIS installer script
 - `logo.bmp` - Logo image displayed on welcome and finish pages
-- `memorycli.exe` - Windows executable (download from GitHub releases)
+- `memorycli.exe` - Windows executable (place this file here before building)
+
+## Notes
+
+- The installer requires `memorycli.exe` to be present in the `windows` directory before building
+- The installer reads the license from `../LICENSE` (project root)
+- The installer will be named `memvid-installer.exe` when built
 
