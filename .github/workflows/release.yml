@@ -69,11 +69,29 @@ jobs:
           7z a ../../../memorycli-${{ matrix.target }}.zip memorycli.exe
           cd ../../..
 
+      - name: Setup NSIS
+        if: matrix.os == 'windows-latest'
+        uses: sebastianpopp/nsis-action@v3.0.0
+
+      - name: Build Windows Installer
+        if: matrix.os == 'windows-latest'
+        run: |
+          # Copy executable to windows folder
+          Copy-Item target\${{ matrix.target }}\release\memorycli.exe windows\memorycli.exe
+          # Build installer
+          cd windows
+          makensis installer.nsi
+          # Move installer to root for easier artifact handling
+          Move-Item memvid-installer.exe ..\memvid-installer.exe
+          cd ..
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: memorycli-${{ matrix.target }}
-          path: memorycli-${{ matrix.target }}.${{ matrix.archive }}
+          path: |
+            memorycli-${{ matrix.target }}.${{ matrix.archive }}
+            memvid-installer.exe
 
   release:
     needs: build
@@ -89,6 +107,7 @@ jobs:
         with:
           files: |
             memorycli-*/memorycli-*
+            memorycli-x86_64-pc-windows-msvc/memvid-installer.exe
           generate_release_notes: true
 
   # Update Homebrew tap
