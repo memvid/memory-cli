@@ -69,9 +69,23 @@ jobs:
           7z a ../../../memorycli-${{ matrix.target }}.zip memorycli.exe
           cd ../../..
 
-      - name: Setup NSIS
+      - name: Install NSIS
         if: matrix.os == 'windows-latest'
-        uses: sebastianpopp/nsis-action@v3.0.0
+        shell: pwsh
+        run: |
+          # Download NSIS from SourceForge (using direct download link)
+          $nsisUrl = "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.09/nsis-3.09.zip"
+          $nsisZip = "$env:RUNNER_TEMP\nsis.zip"
+          $nsisDir = "$env:RUNNER_TEMP\nsis"
+          Write-Host "Downloading NSIS from $nsisUrl"
+          Invoke-WebRequest -Uri $nsisUrl -OutFile $nsisZip -UseBasicParsing
+          Write-Host "Extracting NSIS..."
+          Expand-Archive -Path $nsisZip -DestinationPath $nsisDir -Force
+          $nsisPath = Get-ChildItem -Path $nsisDir -Directory | Select-Object -First 1 -ExpandProperty FullName
+          $env:PATH = "$nsisPath;$env:PATH"
+          echo "$nsisPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          Write-Host "NSIS installed to $nsisPath"
+          makensis /VERSION
 
       - name: Build Windows Installer
         if: matrix.os == 'windows-latest'
