@@ -19,8 +19,8 @@ RequestExecutionLevel admin
 
 ; Interface settings
 !define MUI_ABORTWARNING
-!define MUI_WELCOMEPAGE_TITLE "Welcome to ${APP_NAME}"
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of ${APP_NAME}.$\r$\n$\r$\n${APP_NAME} is a simple CLI tool for testing deployment pipelines.$\r$\n$\r$\nClick Next to continue."
+!define MUI_WELCOMEPAGE_TITLE "Welcome to Memvid CLI"
+!define MUI_WELCOMEPAGE_TEXT "The Memvid CLI is the primary developer tool for creating, inspecting, indexing, and querying$\r$\nMemvid v2 (.mv2) memory files. It provides a safe, offline-first, and deterministic workflow for$\r$\nbuilding and managing portable AI memory.$\r$\n$\r$\nThe installer will set up the Memvid CLI on your system and optionally add it to your PATH so you$\r$\ncan run \"memvid\" from any command prompt.$\r$\n$\r$\nClick Next to continue."
 ; Custom logo on welcome and finish pages
 !define MUI_WELCOMEFINISHPAGE_BITMAP "logo.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "logo.bmp"

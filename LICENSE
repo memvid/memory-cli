@@ -1,21 +1,41 @@
-MIT License
+Memvid CLI – End User License Agreement (EULA)
 
-Copyright (c) 2025 Memvid
+Copyright © 2025 Memvid
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Please read this license agreement carefully before installing or using the Memvid CLI.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. LICENSE
+   The Memvid CLI is licensed, not sold. You are granted a non-exclusive, non-transferable,
+   revocable license to install and use the software solely for your own internal development
+   and evaluation purposes.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. OWNERSHIP
+   All rights, title, and interest in the Memvid CLI, Memvid Core, and the Memvid v2 (.mv2)
+   file format are owned by Memvid.
+
+3. LIMITATIONS
+   You may not modify, reverse engineer, decompile, or redistribute the software except where
+   explicitly permitted by applicable law. You may not use the software to create or distribute
+   a competing “portable AI memory file” format or any product substantially similar to Memvid.
+
+4. SECURITY & DATA
+   Memvid CLI processes data locally on your device. You are solely responsible for the
+   protection, security, and backup of your own .mv2 files. Memvid does not collect or transmit
+   your data.
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED “AS IS” WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NON-INFRINGEMENT.
+
+6. LIABILITY
+   IN NO EVENT SHALL MEMVID OR ITS CONTRIBUTORS BE LIABLE FOR ANY DAMAGES,
+   INCLUDING LOSS OF DATA, BUSINESS INTERRUPTION, OR ANY FORM OF CONSEQUENTIAL DAMAGES,
+   ARISING FROM THE USE OR INABILITY TO USE THE SOFTWARE.
+
+7. ACCEPTANCE
+   By clicking “I Agree” or installing the software, you acknowledge that you have read,
+   understood, and agree to be bound by this License Agreement.
+
+If you do not agree to the terms of this agreement, do not install or use the software.
